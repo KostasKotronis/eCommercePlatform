@@ -2,6 +2,7 @@ package com.publicNext.eCommercePlatform.service;
 
 import com.publicNext.eCommercePlatform.entity.Order;
 import com.publicNext.eCommercePlatform.repository.OrderRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -14,12 +15,12 @@ public class OrderService {
         this.orderRepository = orderRepository;
     }
 
-
     public Order findById(Long id) {
         return orderRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Order not found"));
     }
 
+    @Transactional
     public Order create(Order order) {
         if (order.getLines() != null) {
             order.getLines().forEach(l -> l.setOrder(order)); // δέσε back-reference
@@ -27,6 +28,7 @@ public class OrderService {
         return orderRepository.save(order);
     }
 
+    @Transactional
     public Order update(Long id, Order updatedOrder) {
         Order existing = findById(id);
 
@@ -45,8 +47,14 @@ public class OrderService {
         return orderRepository.save(existing);
     }
 
+    @Transactional
     public void delete(Long id) {
         orderRepository.deleteById(id);
+    }
+
+    @Transactional
+    public int processOrders() {
+        return orderRepository.processOrders();
     }
 
 }

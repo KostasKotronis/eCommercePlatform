@@ -5,7 +5,6 @@ import com.publicNext.eCommercePlatform.service.OrderService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-
 @RestController
 @RequestMapping("/order")
 public class OrderController {
