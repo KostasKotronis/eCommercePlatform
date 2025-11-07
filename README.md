@@ -75,4 +75,7 @@ Scheduler processed 3 unprocessed orders
 ```
 
 ### 🧾 Testing with Postman
-Feel free to import the collection in order to test it locally.
+Feel free to import the collection in order to test it locally:
+```bash
+postman/eCommercePlatform.postman_collection.json
+```
