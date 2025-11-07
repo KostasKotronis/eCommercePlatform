@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:latest
+    container_name: orders_postgres
+    environment:
+      POSTGRES_USER: public_user
+      POSTGRES_PASSWORD: publicN3xt!
+      POSTGRES_DB: public_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U public_user -d public_db"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  # (If Mongo was in the original file, you can keep it or delete it — your app doesn't use it.)
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: orders_app
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "8080:8080"
+    environment:
+      # Spring Boot DB config (connects to the 'postgres' service by name)
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/public_db
+      SPRING_DATASOURCE_USERNAME: public_user
+      SPRING_DATASOURCE_PASSWORD: publicN3xt!
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update   # dev only; use 'validate' in real prod
+      SPRING_JPA_OPEN_IN_VIEW: "false"
+      SPRING_PROFILES_ACTIVE: docker
+      TZ: Europe/Athens
+      JAVA_OPTS: "-XX:MaxRAMPercentage=75 -XX:+UseG1GC"
+
+volumes:
+  postgres_data:
+  # mongo_data:   # keep/remove if you keep/remove Mongo
