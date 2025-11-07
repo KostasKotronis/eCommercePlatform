@@ -29,7 +29,7 @@ public class Order {
     @Column(nullable = false)
     private LocalDateTime orderDate;
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<OrderLine> lines = new ArrayList<>();
 
     @Override
