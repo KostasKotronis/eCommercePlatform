@@ -31,7 +31,7 @@ class OrderControllerTest {
           }
         """;
 
-        mvc.perform(post("/order")
+        mvc.perform(post("/orders")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(body))
                 .andExpect(status().isCreated())
@@ -53,7 +53,7 @@ class OrderControllerTest {
           }
         """;
 
-        mvc.perform(post("/order")
+        mvc.perform(post("/orders")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(badBody))
                 .andExpect(status().isBadRequest())
@@ -73,14 +73,14 @@ class OrderControllerTest {
           }
         """;
 
-        String json = mvc.perform(post("/order")
+        String json = mvc.perform(post("/orders")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(body))
                 .andReturn().getResponse().getContentAsString();
 
         long id = objectMapper.readTree(json).get("id").asLong();
 
-        mvc.perform(get("/order/{id}", id))
+        mvc.perform(get("/orders/{id}", id))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(id))
                 .andExpect(jsonPath("$.customerName").value("Test Customer Name"));
@@ -99,7 +99,7 @@ class OrderControllerTest {
           }
         """;
 
-        String json = mvc.perform(post("/order")
+        String json = mvc.perform(post("/orders")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(createBody))
                 .andReturn().getResponse().getContentAsString();
@@ -115,7 +115,7 @@ class OrderControllerTest {
           }
         """;
 
-        mvc.perform(put("/order/{id}", id)
+        mvc.perform(put("/orders/{id}", id)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(updateBody))
                 .andExpect(status().isOk())
@@ -136,17 +136,17 @@ class OrderControllerTest {
           }
         """;
 
-        String json = mvc.perform(post("/order")
+        String json = mvc.perform(post("/orders")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(body))
                 .andReturn().getResponse().getContentAsString();
 
         long id = objectMapper.readTree(json).get("id").asLong();
 
-        mvc.perform(delete("/order/{id}", id))
+        mvc.perform(delete("/orders/{id}", id))
                 .andExpect(status().isNoContent());
 
-        mvc.perform(get("/order/{id}", id))
+        mvc.perform(get("/orders/{id}", id))
                 .andExpect(status().isNotFound());
     }
 }
