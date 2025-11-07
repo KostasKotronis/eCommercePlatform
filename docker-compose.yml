@@ -18,7 +18,6 @@ services:
       timeout: 3s
       retries: 10
 
-  # (If Mongo was in the original file, you can keep it or delete it — your app doesn't use it.)
 
   app:
     build:
@@ -31,11 +30,10 @@ services:
     ports:
       - "8080:8080"
     environment:
-      # Spring Boot DB config (connects to the 'postgres' service by name)
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/public_db
       SPRING_DATASOURCE_USERNAME: public_user
       SPRING_DATASOURCE_PASSWORD: publicN3xt!
-      SPRING_JPA_HIBERNATE_DDL_AUTO: update   # dev only; use 'validate' in real prod
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
       SPRING_JPA_OPEN_IN_VIEW: "false"
       SPRING_PROFILES_ACTIVE: docker
       TZ: Europe/Athens
@@ -43,4 +41,4 @@ services:
 
 volumes:
   postgres_data:
-  # mongo_data:   # keep/remove if you keep/remove Mongo
+  # mongo_data:
